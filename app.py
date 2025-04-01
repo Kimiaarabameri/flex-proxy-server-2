@@ -3,29 +3,55 @@ import random
 import string
 import os
 import time
+import uuid
 import hashlib
+import json
 
 app = Flask(__name__)
 
-# لیست User-Agent های مختلف برای استفاده تصادفی - متفاوت از سرور اول
+# لیست User-Agent های مختلف برای استفاده تصادفی - با تمرکز روی نسخه‌های iOS
 USER_AGENTS = [
-    "Amazon/34567 (Linux; Android 13; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.128 Mobile Safari/537.36",
-    "Amazon/34568 (Linux; Android 12; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.5304.105 Mobile Safari/537.36",
-    "Amazon/34569 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
-    "Amazon/34570 (iPad; CPU OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
+    "Amazon/55621 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    "Amazon/55622 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    "Amazon/55623 (iPhone; CPU iPhone OS 16_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    "Amazon/55624 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    "Amazon/55626 (iPhone; CPU iPhone OS 16_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    "Amazon/55627 (iPad; CPU OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    "Amazon/55628 (iPad; CPU OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    "Amazon/55629 (iPad; CPU OS 16_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
 ]
 
-# تابع کمکی برای تولید امضاهای تصادفی با روش متفاوت
-def generate_signature_data(marketplace_id):
-    # تولید یک امضا با استفاده از هش مارکت آیدی
+# تابع کمکی برای تولید امضاهای قوی با هش
+def generate_signature_data(marketplace_id=None, request_id=None, method=None, path=None, authority=None):
+    # ایجاد یک کلید منحصر به فرد برای امضا
     timestamp = int(time.time() * 1000)
-    random_suffix = random.randint(10000, 99999)
-    sig_input = f"@method;@path;@authority;x-amzn-marketplace-id;x-amzn-requestid;x-flex-instance-id;sig={timestamp}={random_suffix}"
+    unique_id = str(uuid.uuid4())[:8]
+    random_num = random.randint(10000, 99999)
     
-    # ایجاد امضای متفاوت با استفاده از الگوریتم هش
-    sig_base = f"{marketplace_id}:{timestamp}:{random_suffix}"
-    sig_hash = hashlib.sha256(sig_base.encode()).hexdigest()
-    sig = sig_hash + "".join(random.choices(string.ascii_letters + string.digits + "/+=", k=60))
+    # اگر marketplace_id ارسال شده باشد از آن استفاده می‌کنیم
+    seed = f"{marketplace_id or unique_id}:{timestamp}:{random_num}"
+    
+    # ساخت امضای ورودی با فرمت پیشرفته
+    path_component = f";@path" if path else ""
+    authority_component = f";@authority" if authority else ""
+    method_component = f";@method" if method else ""
+    
+    sig_input = f"{method_component}{path_component}{authority_component};x-amzn-marketplace-id;x-amzn-requestid;x-flex-instance-id;sig={timestamp}={random_num}"
+    
+    # ساخت امضا با استفاده از الگوریتم هش
+    hash_base = hashlib.sha256(seed.encode()).hexdigest()
+    
+    # ترکیب بخش‌های مختلف برای ساخت امضای قوی
+    sig_parts = [
+        hash_base[:40],  # بخش اول هش
+        ''.join(random.choices(string.ascii_letters + string.digits, k=30)),  # بخش تصادفی
+        '/+=',  # کاراکترهای خاص
+        ''.join(random.choices(string.ascii_letters + string.digits, k=30)),  # بخش تصادفی دیگر
+        hash_base[40:]  # بخش دوم هش
+    ]
+    
+    # ترکیب بخش‌ها با هم
+    sig = "".join(sig_parts)
     
     return {
         "signature_input": sig_input,
@@ -36,35 +62,33 @@ def generate_signature_data(marketplace_id):
 @app.route('/')
 def home():
     return jsonify({
-        "status": "Server 2 is running",
-        "message": "Use /accept/<api_key>/<marketplace_id> or /challenge/<api_key>/<marketplace_id> endpoints"
+        "status": "Signature Proxy Server is running",
+        "message": "Use /signature/<api_key>/<marketplace_id> endpoint for generating signatures"
     })
 
-@app.route('/accept/<api_key>/<marketplace_id>')
-def accept_offer(api_key, marketplace_id):
+@app.route('/signature/<api_key>/<marketplace_id>', methods=['GET', 'POST'])
+def generate_signature(api_key, marketplace_id):
     # بررسی API کلید
-    if api_key != os.environ.get('API_KEY', 'default-api-key-server2'):
+    if api_key != os.environ.get('API_KEY', 'default-api-key'):
         return jsonify({"error": "Invalid API key"}), 403
     
-    # تولید داده‌های امضا
-    signature_data = generate_signature_data(marketplace_id)
-    
-    # لاگ کردن درخواست
-    print(f"[Server 2] Accept request for marketplace_id: {marketplace_id}")
-    
-    return jsonify(signature_data)
-
-@app.route('/challenge/<api_key>/<marketplace_id>')
-def validate_challenge(api_key, marketplace_id):
-    # بررسی API کلید
-    if api_key != os.environ.get('API_KEY', 'default-api-key-server2'):
-        return jsonify({"error": "Invalid API key"}), 403
+    # دریافت پارامترهای اضافی از درخواست
+    request_id = request.args.get('request_id')
+    method = request.args.get('method')
+    path = request.args.get('path')
+    authority = request.args.get('authority')
     
     # تولید داده‌های امضا
-    signature_data = generate_signature_data(marketplace_id)
+    signature_data = generate_signature_data(
+        marketplace_id=marketplace_id,
+        request_id=request_id,
+        method=method,
+        path=path,
+        authority=authority
+    )
     
     # لاگ کردن درخواست
-    print(f"[Server 2] Challenge request for marketplace_id: {marketplace_id}")
+    print(f"Signature request for marketplace_id: {marketplace_id}")
     
     return jsonify(signature_data)
 
