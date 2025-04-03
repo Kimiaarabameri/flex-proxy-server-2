@@ -19,13 +19,13 @@ ios_user_agents = [
     "Amazon/3.104.1.0 (iPhone; CPU iPhone OS 16_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/20E252",
 ]
 
-# User-Agent list for Android - updated with exact version 2.505.201
+# User-Agent list for Android - updated with the new supported version 2.527.0.0
 android_user_agents = [
-    "Dalvik/2.1.0 (Linux; U; Android 13; SM-S918B Build/TP1A.220624.014) RabbitAndroid/2.505.201",
-    "Dalvik/2.1.0 (Linux; U; Android 13; Pixel 7 Pro Build/TQ2A.230505.002) RabbitAndroid/2.505.201",
-    "Dalvik/2.1.0 (Linux; U; Android 13; SM-G998U Build/TP1A.220624.014) RabbitAndroid/2.505.201",
-    "Dalvik/2.1.0 (Linux; U; Android 12; SM-S906N Build/SP1A.210812.016) RabbitAndroid/2.505.201",
-    "Dalvik/2.1.0 (Linux; U; Android 12; Pixel 6 Build/SP2A.220405.004) RabbitAndroid/2.505.201"
+    "Dalvik/2.1.0 (Linux; U; Android 13; SM-S918B Build/TP1A.220624.014) RabbitAndroid/2.527.0.0",
+    "Dalvik/2.1.0 (Linux; U; Android 13; Pixel 7 Pro Build/TQ2A.230505.002) RabbitAndroid/2.527.0.0",
+    "Dalvik/2.1.0 (Linux; U; Android 13; SM-G998U Build/TP1A.220624.014) RabbitAndroid/2.527.0.0",
+    "Dalvik/2.1.0 (Linux; U; Android 12; SM-S906N Build/SP1A.210812.016) RabbitAndroid/2.527.0.0",
+    "Dalvik/2.1.0 (Linux; U; Android 12; Pixel 6 Build/SP2A.220405.004) RabbitAndroid/2.527.0.0"
 ]
 
 # تابع کمکی برای تولید امضاهای قوی با هش
