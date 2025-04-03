@@ -21,11 +21,11 @@ ios_user_agents = [
 
 # User-Agent list for Android - updated for version 2.512.0.0
 android_user_agents = [
-    "Amazon/2.512.0.0 (Linux; Android 13; SM-S918B Build/TP1A.220624.014) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.196 Mobile Safari/537.36",
-    "Amazon/2.512.0.0 (Linux; Android 13; SM-G998U Build/TP1A.220624.014) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.196 Mobile Safari/537.36",
-    "Amazon/2.512.0.0 (Linux; Android 13; Pixel 7 Build/TQ2A.230505.002) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.196 Mobile Safari/537.36",
-    "Amazon/2.512.0.0 (Linux; Android 12; SM-S906N Build/SP1A.210812.016) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.196 Mobile Safari/537.36",
-    "Amazon/2.512.0.0 (Linux; Android 12; Pixel 6 Build/SD1A.210817.023) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.196 Mobile Safari/537.36",
+    "Amazon/2.512.0.0 CFNetwork/1485 Darwin/23.4.0",
+    "Amazon/2.512.0.0 CFNetwork/1474 Darwin/23.0.0",
+    "Amazon/2.512.0.0 CFNetwork/1410 Darwin/22.6.0",
+    "Amazon/2.512.0.0 CFNetwork/1402 Darwin/22.3.0",
+    "Amazon/2.512.0.0 CFNetwork/1390 Darwin/22.2.0",
 ]
 
 # تابع کمکی برای تولید امضاهای قوی با هش
