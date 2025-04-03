@@ -9,16 +9,14 @@ import json
 
 app = Flask(__name__)
 
-# لیست User-Agent های مختلف برای استفاده تصادفی - با تمرکز روی نسخه‌های iOS
-USER_AGENTS = [
-    "Amazon/55621 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
-    "Amazon/55622 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
-    "Amazon/55623 (iPhone; CPU iPhone OS 16_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
-    "Amazon/55624 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
-    "Amazon/55626 (iPhone; CPU iPhone OS 16_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
-    "Amazon/55627 (iPad; CPU OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
-    "Amazon/55628 (iPad; CPU OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
-    "Amazon/55629 (iPad; CPU OS 16_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
+# User-Agent list for iOS 16
+ios_user_agents = [
+    # iOS User-Agents - updated for version 3.104.1.0
+    "Amazon/3.104.1.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/20G81",
+    "Amazon/3.104.1.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/20G75",
+    "Amazon/3.104.1.0 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/20F75",
+    "Amazon/3.104.1.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/20F66",
+    "Amazon/3.104.1.0 (iPhone; CPU iPhone OS 16_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/20E252",
 ]
 
 # تابع کمکی برای تولید امضاهای قوی با هش
@@ -56,7 +54,7 @@ def generate_signature_data(marketplace_id=None, request_id=None, method=None, p
     return {
         "signature_input": sig_input,
         "signature": sig,
-        "user_agent": random.choice(USER_AGENTS)
+        "user_agent": random.choice(ios_user_agents)
     }
 
 @app.route('/')
