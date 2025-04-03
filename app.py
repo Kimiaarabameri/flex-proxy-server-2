@@ -19,13 +19,13 @@ ios_user_agents = [
     "Amazon/3.104.1.0 (iPhone; CPU iPhone OS 16_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/20E252",
 ]
 
-# User-Agent list for Android - updated for version 2.512.0.0
+# User-Agent list for Android - compatible format based on error message
 android_user_agents = [
-    "Amazon/2.512.0.0 CFNetwork/1485 Darwin/23.4.0",
-    "Amazon/2.512.0.0 CFNetwork/1474 Darwin/23.0.0",
-    "Amazon/2.512.0.0 CFNetwork/1410 Darwin/22.6.0",
-    "Amazon/2.512.0.0 CFNetwork/1402 Darwin/22.3.0",
-    "Amazon/2.512.0.0 CFNetwork/1390 Darwin/22.2.0",
+    "RabbitAndroid/2.512.0.0 (Linux; Android 13; SM-S918B)",
+    "RabbitAndroid/2.512.0.0 (Linux; Android 13; Pixel 7 Pro)",
+    "RabbitAndroid/2.512.0.0 (Linux; Android 13; SM-G998U)",
+    "RabbitAndroid/2.512.0.0 (Linux; Android 12; SM-S906N)",
+    "RabbitAndroid/2.512.0.0 (Linux; Android 12; Pixel 6)"
 ]
 
 # تابع کمکی برای تولید امضاهای قوی با هش
